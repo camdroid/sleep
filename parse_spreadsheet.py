@@ -1,6 +1,13 @@
 import csv
 from datetime import datetime
 import pytz
+import pprint
+import night
+import pdb
+
+
+pp = pprint.PrettyPrinter()
+
 
 with open('sleep_data.csv') as csvfile:
     reader = csv.reader(csvfile)
@@ -9,6 +16,28 @@ with open('sleep_data.csv') as csvfile:
     third_row = []
     count = 0
     two_rows = False
+
+    slice_general = 5
+    rows = []
+    nights = []
+    for i, row in enumerate(reader):
+        row = row[:slice_general]
+        if row[0] == 'Id':
+            if len(rows) == 3:
+                n = night.read_3_lines_from_csv(rows)
+                nights.append(n)
+                rows = []
+            elif len(rows) == 2:
+                pdb.set_trace()
+                print('Only reading 3-line nights right now')
+                rows = []
+        rows.append(row)
+
+    import pdb; pdb.set_trace()
+    pp.pprint(nights)
+
+
+    import sys; sys.exit(0)
     for row in reader:
         if count % 3 == 0:
             headers.append(row)
