@@ -29,6 +29,7 @@ def write_hours_per_day_to_csv(data, filename):
     # https://github.com/camdroid/dashboard
     with open(filename, 'w') as write_file:
         writer = csv.writer(write_file)
+        writer.writerow(['Date','Hours'])
         for (date, duration) in data.items():
             output_row = [date.strftime('%Y-%m-%d'), duration]
             writer.writerow(output_row)
