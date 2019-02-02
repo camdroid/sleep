@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+from datetime import timedelta
 import pytz
 import pprint
 import night
@@ -7,6 +8,23 @@ import pdb
 
 
 pp = pprint.PrettyPrinter()
+
+
+def count_hours_of_sleep_by_day(nights):
+    sleep_duration = {}
+    for night in nights:
+        # TODO Refactor this, this is awful.
+        if 'AM' in night.start_time.strftime('%p'):
+            if night.start_time.date()-timedelta(days=1) in sleep_duration:
+                sleep_duration[night.start_time.date()-timedelta(days=1)] += night.duration
+            else:
+                sleep_duration[night.start_time.date()-timedelta(days=1)] = night.duration
+        if 'PM' in night.start_time.strftime('%p'):
+            if night.start_time.date() in sleep_duration:
+                sleep_duration[night.start_time.date()] += night.duration
+            else:
+                sleep_duration[night.start_time.date()] = night.duration
+    return sleep_duration
 
 
 with open('sleep_data.csv') as csvfile:
@@ -28,13 +46,12 @@ with open('sleep_data.csv') as csvfile:
                 nights.append(n)
                 rows = []
             elif len(rows) == 2:
-                pdb.set_trace()
                 print('Only reading 3-line nights right now')
                 rows = []
         rows.append(row)
 
-    import pdb; pdb.set_trace()
-    pp.pprint(nights)
+    hours = count_hours_of_sleep_by_day(nights)
+    pp.pprint(hours)
 
 
     import sys; sys.exit(0)
