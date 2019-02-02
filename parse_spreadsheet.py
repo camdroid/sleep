@@ -17,7 +17,7 @@ with open('sleep_data.csv') as csvfile:
     count = 0
     two_rows = False
 
-    slice_general = 5
+    slice_general = 6
     rows = []
     nights = []
     for i, row in enumerate(reader):
