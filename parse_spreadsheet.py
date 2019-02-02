@@ -24,6 +24,15 @@ def count_hours_of_sleep_by_day(nights):
         sleep_duration[date] = sum(values)
     return sleep_duration
 
+def write_hours_per_day_to_csv(data, filename):
+    # Using this to export data for my dashboard project
+    # https://github.com/camdroid/dashboard
+    with open(filename, 'w') as write_file:
+        writer = csv.writer(write_file)
+        for (date, duration) in data.items():
+            output_row = [date.strftime('%Y-%m-%d'), duration]
+            writer.writerow(output_row)
+
 
 with open('sleep_data.csv') as csvfile:
     reader = csv.reader(csvfile)
@@ -50,6 +59,8 @@ with open('sleep_data.csv') as csvfile:
 
     hours = count_hours_of_sleep_by_day(nights)
     pp.pprint(hours)
+
+    write_hours_per_day_to_csv(hours, 'sleep_hours_per_day.csv')
 
 
     import sys; sys.exit(0)
