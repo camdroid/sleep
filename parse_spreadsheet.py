@@ -13,17 +13,15 @@ pp = pprint.PrettyPrinter()
 def count_hours_of_sleep_by_day(nights):
     sleep_duration = {}
     for night in nights:
-        # TODO Refactor this, this is awful.
+        target_date = night.start_time.date()
         if 'AM' in night.start_time.strftime('%p'):
-            if night.start_time.date()-timedelta(days=1) in sleep_duration:
-                sleep_duration[night.start_time.date()-timedelta(days=1)] += night.duration
-            else:
-                sleep_duration[night.start_time.date()-timedelta(days=1)] = night.duration
-        if 'PM' in night.start_time.strftime('%p'):
-            if night.start_time.date() in sleep_duration:
-                sleep_duration[night.start_time.date()] += night.duration
-            else:
-                sleep_duration[night.start_time.date()] = night.duration
+            target_date -= timedelta(days=1)
+        sleep_duration.setdefault(target_date, []).append(night.duration)
+
+    # Feels like there's a way to do with with setdefault that I
+    # can't figure out right now
+    for (date, values) in sleep_duration.items():
+        sleep_duration[date] = sum(values)
     return sleep_duration
 
 
