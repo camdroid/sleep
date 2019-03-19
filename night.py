@@ -6,7 +6,6 @@ DATE_FORMAT = '%d. %m. %Y %H:%M'
 
 
 class Night:
-    
     def __init__(self, _nid, _tz, _start_time, _end_time, _sched, _duration):
         self.nid = _nid
         self.tz = _tz
@@ -16,6 +15,9 @@ class Night:
         self.end_date = self.end_time.date()
         # self.sched = _sched
         self.duration = _duration
+
+    def sleep_started_after_midnight(self):
+        return ('AM' in self.start_time.strftime('%p'))
 
 
 def read_3_lines_from_csv(lines):

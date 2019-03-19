@@ -14,7 +14,7 @@ def count_hours_of_sleep_by_day(nights):
     sleep_duration = {}
     for night in nights:
         target_date = night.start_time.date()
-        if 'AM' in night.start_time.strftime('%p'):
+        if night.sleep_started_after_midnight():
             target_date -= timedelta(days=1)
         sleep_duration.setdefault(target_date, []).append(night.duration)
 
