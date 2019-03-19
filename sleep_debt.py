@@ -14,7 +14,7 @@ pp = pprint.PrettyPrinter()
 TARGET_HOURS = 6.5
 
 
-def read_in_file():
+def read_in_file_for_sleep_debt():
     with open('sleep_hours_per_day.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         sleep_debt_sum = 0
@@ -36,20 +36,20 @@ def read_in_file():
         return (sleep_debt, sleep_debt_with_date)
 
 def get_sleep_debt_no_date():
-    sleep_debt, _ = read_in_file()
+    sleep_debt, _ = read_in_file_for_sleep_debt()
     return sleep_debt
 
 def get_sleep_debt_with_date():
-    _, sleep_debt_with_date = read_in_file()
+    _, sleep_debt_with_date = read_in_file_for_sleep_debt()
     return sleep_debt_with_date
 
-sleep_debt = get_sleep_debt_no_date()
-cumulative_sum = np.cumsum(sleep_debt)
-
-pp.pprint('Last month: {:.2f} hrs'.format(sum(sleep_debt[-30:])))
-pp.pprint('Last quarter: {:.2f} hrs'.format(sum(sleep_debt[-90:])))
-pp.pprint('Last half: {:.2f} hrs'.format(sum(sleep_debt[-180:])))
-pp.pprint('All time: {:.2f} hrs'.format(sum(sleep_debt)))
+# sleep_debt = get_sleep_debt_no_date()
+# cumulative_sum = np.cumsum(sleep_debt)
+#
+# pp.pprint('Last month: {:.2f} hrs'.format(sum(sleep_debt[-30:])))
+# pp.pprint('Last quarter: {:.2f} hrs'.format(sum(sleep_debt[-90:])))
+# pp.pprint('Last half: {:.2f} hrs'.format(sum(sleep_debt[-180:])))
+# pp.pprint('All time: {:.2f} hrs'.format(sum(sleep_debt)))
 
 def plot_over_time_range(days):
     cumulative_sum = np.cumsum(sleep_debt[-days:])
@@ -67,13 +67,30 @@ def get_debt_through_date(end_date):
     cumulative_sleep_debt = sum([datum[1] for datum in trunc_sleep_debt])
     return cumulative_sleep_debt
 
-end_of_feb = datetime.strptime('2019-03-01', '%Y-%m-%d')
-feb_sleep_debt = get_debt_through_date(end_of_feb)
-pp.pprint(feb_sleep_debt)
 
-end_of_march = datetime.strptime('2019-04-01', '%Y-%m-%d')
-march_sleep_debt = get_debt_through_date(end_of_march)
-pp.pprint(march_sleep_debt)
+def get_monthly_sleep_debt():
+    end_of_feb = datetime.strptime('2019-03-01', '%Y-%m-%d')
+    feb_sleep_debt = get_debt_through_date(end_of_feb)
+    pp.pprint(feb_sleep_debt)
+
+    end_of_march = datetime.strptime('2019-04-01', '%Y-%m-%d')
+    march_sleep_debt = get_debt_through_date(end_of_march)
+    pp.pprint(march_sleep_debt)
+
+
+def avg_sleep_time():
+    sleep_data = read_sleep_data_file()
+    raise Exception("WIP")
+    average_time_before_midnight = sum([
+        night.start_time for night in sleep_data
+        if not night.sleep_started_after_midnight()])
+    average_time_after_midnight = sum([
+        night.start_time for night in sleep_data
+        if night.sleep_started_after_midnight()])
+    pdb.set_trace()
+
+
+avg_sleep_time()
 
 pdb.set_trace()
 pass
