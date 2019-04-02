@@ -21,6 +21,9 @@ class Night:
 
 
 def read_3_lines_from_csv(lines):
+    return read_2_lines_from_csv(lines[:-1])
+
+def read_2_lines_from_csv(lines):
     nid = lines[1][0]
     try:
         tz = pytz.timezone(lines[1][1])
@@ -29,8 +32,6 @@ def read_3_lines_from_csv(lines):
         print(e)
     start_time = datetime.strptime(lines[1][2], DATE_FORMAT)
     end_time = datetime.strptime(lines[1][3], DATE_FORMAT)
-    # sched = datetime.strptime(lines[1][4], DATE_FORMAT)
-    sched = None
     hours = float(lines[1][5])
 
-    return Night(nid, tz, start_time, end_time, sched, hours)
+    return Night(nid, tz, start_time, end_time, None, hours)

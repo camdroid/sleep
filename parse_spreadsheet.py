@@ -57,7 +57,8 @@ def read_sleep_data_file(filename=None):
                     nights.append(n)
                     rows = []
                 elif len(rows) == 2:
-                    print('Only reading 3-line nights right now')
+                    n = night.read_2_lines_from_csv(rows)
+                    nights.append(n)
                     rows = []
             rows.append(row)
     return nights

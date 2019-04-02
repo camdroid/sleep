@@ -90,7 +90,18 @@ def avg_sleep_time():
     pdb.set_trace()
 
 
-avg_sleep_time()
+def testing():
+    sleep_debt = get_sleep_debt_no_date()
+    cumulative_sum = np.cumsum(sleep_debt)
+
+    pp.pprint('Last month: {:.2f} hrs'.format(sum(sleep_debt[-30:])))
+    pp.pprint('Last quarter: {:.2f} hrs'.format(sum(sleep_debt[-90:])))
+    pp.pprint('Last half: {:.2f} hrs'.format(sum(sleep_debt[-180:])))
+    pp.pprint('All time: {:.2f} hrs'.format(sum(sleep_debt)))
+
+
+# avg_sleep_time()
+testing()
 
 pdb.set_trace()
 pass
