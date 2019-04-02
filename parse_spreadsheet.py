@@ -45,9 +45,7 @@ def write_hours_per_day_to_csv(data, filename):
             writer.writerow(output_row)
 
 
-def read_sleep_data_file(filename=None):
-    if filename is None:
-        filename = 'raw_sleep_data.csv'
+def read_sleep_data_file(filename):
     with open(filename) as csvfile:
         reader = csv.reader(csvfile)
         slice_general = 6
@@ -67,10 +65,10 @@ def read_sleep_data_file(filename=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--filename', required=False, default=None)
+    parser.add_argument('--input', default='raw_sleep_data.csv')
     parser.add_argument('--output', default='sleep_hours_per_day.csv')
     args = parser.parse_args()
-    nights = read_sleep_data_file(args.filename)
+
+    nights = read_sleep_data_file(args.input)
     hours = count_hours_of_sleep_by_day(nights)
-    pp.pprint(hours)
     write_hours_per_day_to_csv(hours, args.output)
