@@ -67,8 +67,9 @@ def read_sleep_data_file(filename=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--filename', required=False, default=None)
+    parser.add_argument('--output', default='sleep_hours_per_day.csv')
     args = parser.parse_args()
     nights = read_sleep_data_file(args.filename)
     hours = count_hours_of_sleep_by_day(nights)
     pp.pprint(hours)
-    write_hours_per_day_to_csv(hours, 'sleep_hours_per_day.csv')
+    write_hours_per_day_to_csv(hours, args.output)
