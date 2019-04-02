@@ -22,8 +22,11 @@ def count_hours_of_sleep_by_day(nights):
     # Feels like there's a way to do with with setdefault that I
     # can't figure out right now
     for (date, values) in sleep_duration.items():
+        # Sum values just in case there are multiple entries
+        # for a single day
         sleep_duration[date] = sum(values)
     return sleep_duration
+
 
 def write_hours_per_day_to_csv(data, filename):
     # Using this to export data for my dashboard project
@@ -35,33 +38,25 @@ def write_hours_per_day_to_csv(data, filename):
             output_row = [date.strftime('%Y-%m-%d'), duration]
             writer.writerow(output_row)
 
+
 def read_sleep_data_file(filename=None):
     if filename is None:
-        filename = 'sleep_data.csv'
+        filename = 'raw_sleep_data.csv'
     with open(filename) as csvfile:
         reader = csv.reader(csvfile)
-        headers = []
-        data = []
-        third_row = []
-        count = 0
-        two_rows = False
-
         slice_general = 6
         rows = []
         nights = []
-        for i, row in enumerate(reader):
+
+        for row in reader:
             row = row[:slice_general]
             if row[0] == 'Id':
-                if len(rows) == 3:
-                    n = night.read_3_lines_from_csv(rows)
-                    nights.append(n)
-                    rows = []
-                elif len(rows) == 2:
-                    n = night.read_2_lines_from_csv(rows)
-                    nights.append(n)
-                    rows = []
+                n = night.read_lines_from_csv(rows)
+                nights.append(n)
+                rows = []
             rows.append(row)
-    return nights
+        nights.append(night.read_lines_from_csv(rows))
+    return [night for night in nights if night]
 
 
 if __name__ == '__main__':

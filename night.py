@@ -19,11 +19,17 @@ class Night:
     def sleep_started_after_midnight(self):
         return ('AM' in self.start_time.strftime('%p'))
 
+def read_lines_from_csv(lines):
+    # Requires at least 2 lines, relating to exactly 1 night of sleep data
+    return read_2_lines_from_csv(lines)
+
 
 def read_3_lines_from_csv(lines):
     return read_2_lines_from_csv(lines[:-1])
 
 def read_2_lines_from_csv(lines):
+    if not lines:
+        return None
     nid = lines[1][0]
     try:
         tz = pytz.timezone(lines[1][1])
