@@ -34,8 +34,14 @@ def write_hours_per_day_to_csv(data, filename):
     with open(filename, 'w') as write_file:
         writer = csv.writer(write_file)
         writer.writerow(['Date','Hours'])
+        output_rows = []
         for (date, duration) in data.items():
             output_row = [date.strftime('%Y-%m-%d'), duration]
+            output_rows.append(output_row)
+        # Sort by date to make debugging easier
+        # TODO There's probably a more Pythonic way to do this whole function
+        output_rows.sort()
+        for output_row in output_rows:
             writer.writerow(output_row)
 
 
