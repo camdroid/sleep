@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 from datetime import timedelta
+import argparse
 import pytz
 import pprint
 import night
@@ -34,8 +35,10 @@ def write_hours_per_day_to_csv(data, filename):
             output_row = [date.strftime('%Y-%m-%d'), duration]
             writer.writerow(output_row)
 
-def read_sleep_data_file():
-    with open('sleep_data.csv') as csvfile:
+def read_sleep_data_file(filename=None):
+    if filename is None:
+        filename = 'sleep_data.csv'
+    with open(filename) as csvfile:
         reader = csv.reader(csvfile)
         headers = []
         data = []
@@ -61,7 +64,10 @@ def read_sleep_data_file():
 
 
 if __name__ == '__main__':
-    nights = read_sleep_data_file()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--filename', required=False, default=None)
+    args = parser.parse_args()
+    nights = read_sleep_data_file(args.filename)
     hours = count_hours_of_sleep_by_day(nights)
     pp.pprint(hours)
     write_hours_per_day_to_csv(hours, 'sleep_hours_per_day.csv')
