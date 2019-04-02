@@ -48,8 +48,8 @@ def read_sleep_data_file(filename=None):
         rows = []
         nights = []
 
-        for row in reader:
-            row = row[:slice_general]
+        rows = [row[:slice_general] for row in reader]
+        for row in rows:
             if row[0] == 'Id':
                 n = night.read_lines_from_csv(rows)
                 nights.append(n)
