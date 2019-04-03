@@ -1,8 +1,6 @@
 import csv
-from datetime import datetime
 from datetime import timedelta
 import argparse
-import pytz
 import pprint
 import night
 import pdb
@@ -43,6 +41,18 @@ def write_hours_per_day_to_csv(data, filename):
         output_rows.sort()
         for output_row in output_rows:
             writer.writerow(output_row)
+    pp.pprint('Wrote output to {}'.format(filename))
+
+
+def get_next_chunk(all_lines):
+    chunk = []
+    for row in all_lines:
+        if row[0] == 'Id':
+            ret = chunk
+            chunk = []
+            yield ret
+        chunk.append(row)
+    yield chunk
 
 
 def read_sleep_data_file(filename):
@@ -53,13 +63,7 @@ def read_sleep_data_file(filename):
         nights = []
 
         rows = [row[:slice_general] for row in reader]
-        for row in rows:
-            if row[0] == 'Id':
-                n = night.read_lines_from_csv(rows)
-                nights.append(n)
-                rows = []
-            rows.append(row)
-        nights.append(night.read_lines_from_csv(rows))
+        nights = [night.read_lines_from_csv(chunk) for chunk in get_next_chunk(rows)]
     return [night for night in nights if night]
 
 
