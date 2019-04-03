@@ -1,4 +1,5 @@
 *.csv
-*.swp
+*.sw[op]
+.*.sw[op]
 __pycache__/
 env/
